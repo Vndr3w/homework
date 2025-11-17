@@ -37,11 +37,31 @@
 ### Требования к результатам
 1. Приложите в файл README.md скриншот раздела Configuration > Hosts, где видно, что агенты подключены к серверу
 
+![2.1](img/img2.1.png)
+
 2. Приложите в файл README.md скриншот лога zabbix agent, где видно, что он работает с сервером
+
+![2.2](img/img2.2.png)
+![2.3](img/img2.3.png)
 
 3. Приложите в файл README.md скриншот раздела Monitoring > Latest data для обоих хостов, где видны поступающие от агентов данные.
 
+![2.4](img/img2.4.png)
+
 4. Приложите в файл README.md текст использованных команд в GitHub
+
+	* sudo -s 
+	* wget https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_6.0+ubuntu24.04_all.deb
+	* dpkg -i zabbix-release_latest_6.0+ubuntu24.04_all.deb
+	* apt update
+	* apt install zabbix-agent
+	* systemctl restart zabbix-agent
+	* systemctl enable zabbix-agent 
+	
+
+	* find / -name zabbix_agentd.conf
+	* tail -f /var/log/zabbix/zabbix_agentd.log
+	* sed -i 's/Server=127.0.0.1/Server=158.160.208.3/g' /etc/zabbix/zabbix_agentd.conf
 
 ---
 
