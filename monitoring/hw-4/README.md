@@ -29,7 +29,7 @@
 4. Создайте сервис как показано на уроке
 
     * sudo nano /etc/systemd/system/prometheus.service
-    * <details>
+<details>
 <summary>prometheus.service</summary>
 [Unit]
 Description=Prometheus
@@ -47,7 +47,7 @@ ExecStart=/usr/local/bin/prometheus \
 
 [Install]
 WantedBy=multi-user.target
- </details>
+</details>
 
 5. Проверьте что prometheus запускается, останавливается, перезапускается и отображает статус с помощью systemctl
 
@@ -78,7 +78,7 @@ WantedBy=multi-user.target
 4. Создайте сервис для как показано на уроке
 
     * sudo nano /etc/systemd/system/node-exporter.service
-    * <details>
+<details>
 <summary>node-exporter.service</summary>
 [Unit]
 Description=Node Exporter Lesson 9.4
