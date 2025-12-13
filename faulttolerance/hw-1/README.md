@@ -47,29 +47,28 @@ wr
 <details>
 <summary> Код, который использовал для установки </summary>
 
-```
-sudo apt install nginx keepalived -y
-sudo systemctl enable nginx keepalived
-sudo systemctl start nginx
+- sudo apt install nginx keepalived -y
+- sudo systemctl enable nginx keepalived
+- sudo systemctl start nginx
 
-vm-1 ->
-echo '<h1>VM1 работает!</h1>' | sudo tee /var/www/html/index.html
-sudo nano /usr/local/bin/check_web.sh
-sudo chmod +x /usr/local/bin/check_web.sh
-cd /usr/local/bin/
-./check_web.sh 
+- **vm-1**
+  - echo ```'<h1>VM1 работает!</h1>' | sudo tee /var/www/html/index.html```
+  - sudo nano /usr/local/bin/check_web.sh
+  - sudo chmod +x /usr/local/bin/check_web.sh
+  - cd /usr/local/bin/
+  - ./check_web.sh 
 
-vm-2 ->
-echo '<h1>VM2 работает!</h1>' | sudo tee /var/www/html/index.html
-sudo nano /usr/local/bin/check_web.sh
-sudo chmod +x /usr/local/bin/check_web.sh
-cd /usr/local/bin/
-./check_web.sh 
+- **vm-2**
+  - echo ```'<h1>VM2 работает!</h1>' | sudo tee /var/www/html/index.html```
+  - sudo nano /usr/local/bin/check_web.sh
+  - sudo chmod +x /usr/local/bin/check_web.sh
+  - cd /usr/local/bin/
+  - ./check_web.sh
 
 	<details>
 	<summary> check_web.sh </summary>
 
-	```
+	```bash
 	#!/bin/bash
 	PORT=80
 	WEBROOT=/var/www/html
@@ -77,59 +76,56 @@ cd /usr/local/bin/
 
 	# Проверка порта (bash /dev/tcp)
 	if ! timeout 1 bash -c "cat < /dev/null > /dev/tcp/localhost/$PORT" 2>/dev/null; then
-	    exit 1
+		exit 1
 	fi
 
 	# Проверка файла index.html
 	if [ ! -f "$INDEX_FILE" ]; then
-	    exit 1
+		exit 1
 	fi
 
 	exit 0
 	```
 	</details>
 
-sudo nano /etc/keepalived/keepalived.conf
-
+- sudo nano /etc/keepalived/keepalived.conf
 	<details>
 	<summary> keepalived.conf </summary>
 
-	```
+	```py
 	global_defs {
-	    router_id LVS_DEVEL
+		router_id LVS_DEVEL
 	}
 
 	vrrp_script check_web {
-	    script "/usr/local/bin/check_web.sh"
-	    interval 3
-	    fall 2
-	    rise 2
+		script "/usr/local/bin/check_web.sh"
+		interval 3
+		fall 2
+		rise 2
 	}
 
 	vrrp_instance VI_1 {
-	    interface enp0s8 # Указываем свой интерфейс, ip a
-	    state MASTER # Сменить на BACKUP
-	    virtual_router_id 100 # Указываем последний октет виртуальной сети
-	    priority 200 # Понизить приоритет на BACKUP
-	    advert_int 1
-	    authentication {
-	        auth_type PASS
-	        auth_pass secret
-	    }
-	    virtual_ipaddress {
-	        192.168.56.100/24 
-	    }
-	    track_script {
-	        check_web
-	    }
+		interface enp0s8 # Указываем свой интерфейс, ip a
+		state MASTER # Сменить на BACKUP
+		virtual_router_id 100 # Указываем последний октет виртуальной сети
+		priority 200 # Понизить приоритет на BACKUP
+		advert_int 1
+		authentication {
+			auth_type PASS
+			auth_pass secret
+		}
+		virtual_ipaddress {
+			192.168.56.100/24 
+		}
+		track_script {
+			check_web
+		}
 	}
-
 	```
-	</details>
+	</details>	
 
-sudo systemctl restart keepalived
+- sudo systemctl restart keepalived
 
-```
 </details>
 
 [Bash-скрипт](check_web.sh)
